@@ -1,16 +1,15 @@
 #include <iostream>
 #include <stdlib.h>
 
-char helloWorld[] = "Hello World\n";
+char helloWorld[] = "Hello World!\n";
 
 void helloASM() {
 #ifdef _WIN32
 	__asm
 	{
-		; Push hello world pointer into eax register
 		mov eax, offset helloWorld
 		push eax
-		call printf; invoke prinf
+		call printf;
 		pop ebx
 	}
 #else
