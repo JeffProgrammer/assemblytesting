@@ -3,19 +3,26 @@
 
 char helloWorld[] = "Hello World\n";
 
-int main(int argc, const char **argv) {
+void helloASM() {
 #ifdef _WIN32
-	__asm 
+	__asm
 	{
 		; Push hello world pointer into eax register
 		mov eax, offset helloWorld
-		push eax
-		call printf; invoke prinf
-		pop ebx
+			push eax
+			call printf; invoke prinf
+			pop ebx
 	}
-	system("PAUSE");
 #else
 	printf("%s", helloWorld);
+#endif
+}
+
+int main(int argc, const char **argv) {
+	helloASM();
+
+#ifdef _WIN32
+	system("pause");
 #endif
 	return 0;
 }
