@@ -32,13 +32,14 @@ int add2Numbers(int a, int b) {
 
 /**
  int total = 0;
- while ((n--) > 0)
-	total += n;
+ for (int i = 0; i < n; i++)
+	total += i;
  return total;
  */
-int addZeroToN(register int n) {
-	register int total = 0;
+int addZeroToN(int n) {
+	int total = 0;
 
+#ifdef _WIN32
 	__asm {
 		mov ecx, n;
 		mov eax, total;
@@ -50,6 +51,10 @@ int addZeroToN(register int n) {
 
 		mov total, eax;
 	}
+#else
+	for (int i = 0; i < n; i++)
+		total += i;
+#endif
 	return total;
 }
 
