@@ -4,7 +4,7 @@
 char helloWorld[] = "Hello World\n";
 
 int main(int argc, const char **argv) {
-
+#ifdef _WIN32
 	__asm 
 	{
 		; Push hello world pointer into eax register
@@ -13,10 +13,9 @@ int main(int argc, const char **argv) {
 		call printf; invoke prinf
 		pop ebx
 	}
-
-
-#ifdef _WIN32
 	system("PAUSE");
+#else
+	printf("%s", helloWorld);
 #endif
 	return 0;
 }
