@@ -30,11 +30,38 @@ int add2Numbers(int a, int b) {
 #endif
 }
 
+/**
+ int total = 0;
+ while ((n--) > 0)
+	total += n;
+ return total;
+ */
+int addZeroToN(register int n) {
+	register int total = 0;
+
+	__asm {
+		mov ecx, n;
+		mov eax, total;
+
+	Loopy:
+		add eax, ecx;
+		dec ecx;
+		jnz Loopy;
+
+		mov total, eax;
+	}
+	return total;
+}
+
+
 int main(int argc, const char **argv) {
 	helloASM();
 
 	int x = add2Numbers(4, 9);
 	printf("x is: %d\n", x);
+
+	int t = addZeroToN(5);
+	printf("t is: %d\n", t);
 
 #ifdef _WIN32
 	system("pause");
