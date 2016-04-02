@@ -14,7 +14,7 @@ void helloASM() {
 		mov eax, offset helloWorld
 		push eax
 		call printf;
-		pop ebx
+		add esp, 4;
 	}
 #else
 	printf("%s", helloWorld);
@@ -68,19 +68,16 @@ int addZeroToN(int n) {
  */
 int getWordCount(const char *string) {
 #ifdef SUPPORT_MSVC_INLINE_ASM
-	// Register EAX: The string pointer.
-	// Register ECX: The word count.
+	// Register eax: The string pointer.
+	// Register ecx: The word count.
 	int count = 0;
 	__asm {
 		mov eax, string;
+		xor ecx, ecx; //< Xoring with itself is setting it to 0 more efficiently.
 
-		cmp[eax], 0x0;
-		je Else;
-			mov ecx, 1;
-			jmp EndIf;
-		Else:
-			mov ecx, 0;
-		EndIf:
+		cmp [eax], cl;
+		je Done;
+		inc ecx;  //< Guarentee at least 1 character is present.
 
 	Loopy:
 		cmp [eax], 0x0;
