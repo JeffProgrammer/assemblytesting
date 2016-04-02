@@ -61,8 +61,15 @@ int addZeroToN(int n) {
 	return total;
 }
 
+/**
+ * Gets the amount of words there are within a string.
+ * @param string The string to test.
+ * @return the count of words.
+ */
 int getWordCount(const char *string) {
 #ifdef SUPPORT_MSVC_INLINE_ASM
+	// Register EAX: The string pointer.
+	// Register ECX: The word count.
 	int count = 0;
 	__asm {
 		mov eax, string;
