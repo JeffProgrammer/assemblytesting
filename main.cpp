@@ -25,8 +25,8 @@ int add2Numbers(int a, int b) {
 #ifdef SUPPORT_MSVC_INLINE_ASM
 	__asm {
 		mov eax, a
-		mov ebx, b
-		add eax, ebx
+		mov ecx, b
+		add eax, ecx
 	}
 #else
 	return a + b;
