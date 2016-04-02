@@ -61,6 +61,48 @@ int addZeroToN(int n) {
 	return total;
 }
 
+int getWordCount(const char *string) {
+#ifdef SUPPORT_MSVC_INLINE_ASM
+	int count = 0;
+	__asm {
+		mov eax, string;
+
+		cmp[eax], 0x0;
+		je Else;
+			mov ecx, 1;
+			jmp EndIf;
+		Else:
+			mov ecx, 0;
+		EndIf:
+
+	Loopy:
+		cmp [eax], 0x0;
+		je Done;
+
+		cmp [eax], 0x20;
+		jne Continue;
+
+		inc ecx;
+
+	Continue:
+		inc eax;
+		jmp Loopy;
+
+	Done:
+		mov count, ecx;
+	}
+	return count;
+#else
+	int count = ((*string) == 0x0) ? 0 : 1;
+	while ((*string) != 0x0) {
+		if ((*string) == 0x20)
+			count++;
+		++string;
+	}
+	return count;
+#endif
+}
+
 
 int main(int argc, const char **argv) {
 	helloASM();
@@ -70,6 +112,11 @@ int main(int argc, const char **argv) {
 
 	int t = addZeroToN(5);
 	printf("t is: %d\n", t);
+
+	int wc = getWordCount("Hi nobody my name is bob");
+	printf("word count of \"Hi nobody my name is bob\": %d\n", wc);
+	printf("word count of empty string: %d\n", getWordCount(""));
+	printf("word count of single word: %d\n", getWordCount("hi"));
 
 #ifdef _WIN32
 	system("pause");
