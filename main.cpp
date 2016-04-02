@@ -93,7 +93,7 @@ int getWordCount(const char *string) {
 	}
 	return count;
 #else
-	int count = !!((*string) == 0x0);
+	int count = !!(*string);
 	while ((*string) != 0x0) {
 		if ((*string) == 0x20)
 			count++;
