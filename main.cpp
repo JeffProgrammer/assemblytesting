@@ -1,10 +1,14 @@
 #include <iostream>
 #include <stdlib.h>
 
+#ifdef _WIN32
+	#define SUPPORT_MSVC_INLINE_ASM
+#endif
+
 char helloWorld[] = "Hello World!\n";
 
 void helloASM() {
-#ifdef _WIN32
+#ifdef SUPPORT_MSVC_INLINE_ASM
 	__asm
 	{
 		mov eax, offset helloWorld
@@ -18,7 +22,7 @@ void helloASM() {
 }
 
 int add2Numbers(int a, int b) {
-#ifdef _WIN32
+#ifdef SUPPORT_MSVC_INLINE_ASM
 	__asm {
 		mov eax, a
 		mov ebx, b
@@ -38,7 +42,7 @@ int add2Numbers(int a, int b) {
 int addZeroToN(int n) {
 	int total = 0;
 
-#ifdef _WIN32
+#ifdef SUPPORT_MSVC_INLINE_ASM
 	__asm {
 		mov ecx, n;
 		mov eax, total;
