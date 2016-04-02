@@ -3,6 +3,7 @@
 
 #ifdef _WIN32
 	#define SUPPORT_MSVC_INLINE_ASM
+	#define SUPPORT_INTRINCICS
 #endif
 
 char helloWorld[] = "Hello World!\n";
@@ -107,6 +108,36 @@ int getWordCount(const char *string) {
 #endif
 }
 
+class Vec3 {
+public:
+	Vec3(float x, float y, float z) {
+		this->x = x;
+		this->y = y;
+		this->z = z;
+		this->w = 0.0f;
+	}
+
+	Vec3 operator+(const Vec3 &vec) {
+#ifdef SUPPORT_INTRINCICS
+		data = _mm_add_ps(data, vec.data);
+#else
+		x += vec.x;
+		y += vec.y;
+		z += vec.z;
+#endif
+		return *this;
+	}
+
+	union {
+		struct {
+			float x;
+			float y;
+			float z;
+			float w;
+		};
+		__m128 data;
+	};
+};
 
 int main(int argc, const char **argv) {
 	helloASM();
@@ -121,6 +152,12 @@ int main(int argc, const char **argv) {
 	printf("word count of \"Hi nobody my name is bob\": %d\n", wc);
 	printf("word count of empty string: %d\n", getWordCount(""));
 	printf("word count of single word: %d\n", getWordCount("hi"));
+
+	Vec3 vec(2, 3, 5);
+	printf("vec is: %f %f %f\n", vec.x, vec.y, vec.z);
+
+	Vec3 vec2 = vec + Vec3(2, 3, 5);
+	printf("vec2 is: %f %f %f", vec2.x, vec2.y, vec2.z);
 
 #ifdef _WIN32
 	system("pause");
