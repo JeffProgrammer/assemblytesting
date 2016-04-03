@@ -4,6 +4,9 @@
 #ifdef _WIN32
 	#define SUPPORT_MSVC_INLINE_ASM
 	#define SUPPORT_INTRINCICS
+	#define ALIGN_16 __declspec(align(16))
+#else
+	#define ALIGN_16
 #endif
 
 char helloWorld[] = "Hello World!\n";
@@ -108,7 +111,7 @@ int getWordCount(const char *string) {
 #endif
 }
 
-class Vec3 {
+ALIGN_16 class Vec3 {
 public:
 	Vec3(float x, float y, float z) {
 		this->x = x;
@@ -157,7 +160,7 @@ int main(int argc, const char **argv) {
 	printf("vec is: %f %f %f\n", vec.x, vec.y, vec.z);
 
 	Vec3 vec2 = vec + Vec3(2, 3, 5);
-	printf("vec2 is: %f %f %f", vec2.x, vec2.y, vec2.z);
+	printf("vec2 is: %f %f %f\n", vec2.x, vec2.y, vec2.z);
 
 #ifdef _WIN32
 	system("pause");
