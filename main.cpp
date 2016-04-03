@@ -3,7 +3,7 @@
 
 #ifdef _WIN32
 	#define SUPPORT_MSVC_INLINE_ASM
-	#define SUPPORT_INTRINCICS
+	#define SUPPORT_X86_INTRINCICS
 	#define ALIGN_16 __declspec(align(16))
 #else
 	#define ALIGN_16
@@ -117,16 +117,38 @@ public:
 		this->x = x;
 		this->y = y;
 		this->z = z;
-		this->w = 0.0f;
+		this->w = 1.0f; // 1 in case of division.
 	}
 
 	Vec3 operator+(const Vec3 &vec) {
-#ifdef SUPPORT_INTRINCICS
+#ifdef SUPPORT_X86_INTRINCICS
 		data = _mm_add_ps(data, vec.data);
 #else
 		x += vec.x;
 		y += vec.y;
 		z += vec.z;
+#endif
+		return *this;
+	}
+
+	Vec3 operator-(const Vec3 &vec) {
+#ifdef SUPPORT_X86_INTRINCICS
+		data = _mm_sub_ps(data, vec.data);
+#else
+		x -= vec.x;
+		y -= vec.y;
+		z -= vec.z;
+#endif
+		return *this;
+	}
+
+	Vec3 convolve(const Vec3 &vec) {
+#ifdef SUPPORT_X86_INTRINCICS
+		data = _mm_mul_ps(data, vec.data);
+#else
+		x *= vec.x;
+		y *= vec.y;
+		z *= vec.z;
 #endif
 		return *this;
 	}
